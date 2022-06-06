@@ -1,32 +1,35 @@
 package org.example.entity;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "employees")
 public class Employee {
-    private enum Department {
-        IT,
-        HR,
-        MANAGER
-    }
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "surname")
     private String surname;
-    private Department department;
+    @Column(name = "department")
+    private int department;
+    @Column(name = "salary")
     private int salary;
 
     public Employee() {
     }
 
-    public Employee(String name, String surname, String department, int salary) {
+    public Employee(String name, String surname, int department, int salary) {
         this.name = name;
         this.surname = surname;
+        this.department = department;
         this.salary = salary;
-        try {
-            this.department = Department.valueOf(department);
-        } catch (EnumConstantNotPresentException exception){
-            System.err.println("Exception: "  +exception.getMessage());
-        }
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -45,17 +48,12 @@ public class Employee {
         this.surname = surname;
     }
 
-    public Department getDepartment() {
+    public int getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
-        try {
-            this.department = Department.valueOf(department);
-        } catch (EnumConstantNotPresentException exception){
-            System.err.println("Exception: "  +exception.getMessage());
-        }
-
+    public void setDepartment(int department) {
+        this.department = department;
     }
 
     public int getSalary() {
@@ -73,18 +71,19 @@ public class Employee {
 
         Employee employee = (Employee) o;
 
+        if (getId() != employee.getId()) return false;
+        if (getDepartment() != employee.getDepartment()) return false;
         if (getSalary() != employee.getSalary()) return false;
         if (getName() != null ? !getName().equals(employee.getName()) : employee.getName() != null) return false;
-        if (getSurname() != null ? !getSurname().equals(employee.getSurname()) : employee.getSurname() != null)
-            return false;
-        return getDepartment() == employee.getDepartment();
+        return getSurname() != null ? getSurname().equals(employee.getSurname()) : employee.getSurname() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getName() != null ? getName().hashCode() : 0;
+        int result = getId();
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
         result = 31 * result + (getSurname() != null ? getSurname().hashCode() : 0);
-        result = 31 * result + (getDepartment() != null ? getDepartment().hashCode() : 0);
+        result = 31 * result + getDepartment();
         result = 31 * result + getSalary();
         return result;
     }
@@ -92,7 +91,8 @@ public class Employee {
     @Override
     public String toString() {
         return "Employee{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", department=" + department +
                 ", salary=" + salary +
