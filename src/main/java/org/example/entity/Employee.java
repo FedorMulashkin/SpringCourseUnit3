@@ -14,14 +14,14 @@ public class Employee {
     @Column(name = "surname")
     private String surname;
     @Column(name = "department")
-    private int department;
+    private String department;
     @Column(name = "salary")
     private int salary;
 
     public Employee() {
     }
 
-    public Employee(String name, String surname, int department, int salary) {
+    public Employee(String name, String surname, String department, int salary) {
         this.name = name;
         this.surname = surname;
         this.department = department;
@@ -48,11 +48,11 @@ public class Employee {
         this.surname = surname;
     }
 
-    public int getDepartment() {
+    public String getDepartment() {
         return department;
     }
 
-    public void setDepartment(int department) {
+    public void setDepartment(String department) {
         this.department = department;
     }
 
@@ -72,7 +72,7 @@ public class Employee {
         Employee employee = (Employee) o;
 
         if (getId() != employee.getId()) return false;
-        if (getDepartment() != employee.getDepartment()) return false;
+        if (getDepartment().equals(employee.getDepartment())) return false;
         if (getSalary() != employee.getSalary()) return false;
         if (getName() != null ? !getName().equals(employee.getName()) : employee.getName() != null) return false;
         return getSurname() != null ? getSurname().equals(employee.getSurname()) : employee.getSurname() == null;
@@ -83,7 +83,7 @@ public class Employee {
         int result = getId();
         result = 31 * result + (getName() != null ? getName().hashCode() : 0);
         result = 31 * result + (getSurname() != null ? getSurname().hashCode() : 0);
-        result = 31 * result + getDepartment();
+        result = 31 * result + (getDepartment()!= null ? getDepartment().hashCode() : 0);
         result = 31 * result + getSalary();
         return result;
     }
