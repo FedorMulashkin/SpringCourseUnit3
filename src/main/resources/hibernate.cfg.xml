@@ -26,6 +26,7 @@
 
     <!-- Annotated entity classes -->
     <mapping class="org.example.entity.Employee"/>
+    <mapping class="org.example.entity.Detail"/>
 
 </session-factory>
 </hibernate-configuration>
